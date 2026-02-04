@@ -271,13 +271,25 @@ func (s *Service) createComposeService(ctx context.Context, req DeployRequest) (
 // (written by WriteEnvFile before this is called).
 func (s *Service) loadProject(ctx context.Context, composeFile, projectName string, profiles []string) (*types.Project, error) {
 	workingDir := filepath.Dir(composeFile)
+	envFile := filepath.Join(workingDir, ".env")
 
-	projectOpts, err := cli.NewProjectOptions(
-		[]string{composeFile},
+	// Build project options
+	opts := []cli.ProjectOptionsFn{
 		cli.WithWorkingDirectory(workingDir),
 		cli.WithName(projectName),
 		cli.WithProfiles(profiles),
-		cli.WithDotEnv, // Loads .env from workingDir automatically
+		cli.WithDotEnv, // Loads .env for YAML interpolation
+	}
+
+	// If .env file exists, also load it via WithEnvFiles for container env var substitution
+	// WithDotEnv handles YAML interpolation, WithEnvFiles handles ${VAR} in environment: sections
+	if _, err := os.Stat(envFile); err == nil {
+		opts = append(opts, cli.WithEnvFiles(envFile))
+	}
+
+	projectOpts, err := cli.NewProjectOptions(
+		[]string{composeFile},
+		opts...,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create project options: %w", err)
