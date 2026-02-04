@@ -273,20 +273,29 @@ func (s *Service) loadProject(ctx context.Context, composeFile, projectName stri
 	workingDir := filepath.Dir(composeFile)
 	envFile := filepath.Join(workingDir, ".env")
 
-	// Load .env file into process environment for ${VAR} substitution in compose
-	// This is needed because compose's WithDotEnv/WithEnvFiles only handle YAML interpolation,
-	// not environment variable substitution in the `environment:` section
-	if err := s.loadEnvFile(envFile); err != nil {
-		s.logWarn("Failed to load .env file", logrus.Fields{"error": err.Error(), "path": envFile})
-	}
-
 	// Build project options
 	opts := []cli.ProjectOptionsFn{
 		cli.WithWorkingDirectory(workingDir),
 		cli.WithName(projectName),
 		cli.WithProfiles(profiles),
-		cli.WithOsEnv,  // Load OS environment (including vars we just set from .env)
-		cli.WithDotEnv, // Also load .env for YAML interpolation
+	}
+
+	// Load .env file manually and pass via WithEnv for reliable interpolation
+	// This bypasses compose-go's WithDotEnv which can have issues with file loading
+	if _, err := os.Stat(envFile); err == nil {
+		s.logInfo("Loading .env file for compose", logrus.Fields{"path": envFile})
+
+		envVars, loadErr := loadEnvFile(envFile)
+		if loadErr != nil {
+			s.logWarn("Failed to parse .env file", logrus.Fields{"error": loadErr.Error()})
+		} else {
+			s.logInfo("Loaded env vars from .env", logrus.Fields{"count": len(envVars)})
+			if len(envVars) > 0 {
+				opts = append(opts, cli.WithEnv(envVars))
+			}
+		}
+	} else {
+		s.logDebug("No .env file found", logrus.Fields{"path": envFile})
 	}
 
 	projectOpts, err := cli.NewProjectOptions(
@@ -305,40 +314,34 @@ func (s *Service) loadProject(ctx context.Context, composeFile, projectName stri
 	return project, nil
 }
 
-// loadEnvFile reads a .env file and sets the variables in the process environment.
-func (s *Service) loadEnvFile(path string) error {
-	file, err := os.Open(path)
+// loadEnvFile reads a .env file and returns KEY=VALUE strings for compose interpolation
+func loadEnvFile(path string) ([]string, error) {
+	content, err := os.ReadFile(path)
 	if err != nil {
-		if os.IsNotExist(err) {
-			return nil // No .env file is fine
-		}
-		return err
+		return nil, err
 	}
-	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
+	var envVars []string
+	scanner := bufio.NewScanner(strings.NewReader(string(content)))
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
+
 		// Skip empty lines and comments
 		if line == "" || strings.HasPrefix(line, "#") {
 			continue
 		}
-		// Parse KEY=VALUE
-		parts := strings.SplitN(line, "=", 2)
-		if len(parts) != 2 {
+
+		// Must have KEY=VALUE format
+		idx := strings.Index(line, "=")
+		if idx <= 0 {
 			continue
 		}
-		key := strings.TrimSpace(parts[0])
-		value := strings.TrimSpace(parts[1])
-		// Remove surrounding quotes if present
-		if len(value) >= 2 && ((value[0] == '"' && value[len(value)-1] == '"') || (value[0] == '\'' && value[len(value)-1] == '\'')) {
-			value = value[1 : len(value)-1]
-		}
-		if err := os.Setenv(key, value); err != nil {
-			s.logWarn("Failed to set env var", logrus.Fields{"key": key, "error": err.Error()})
-		}
+
+		// Add the full KEY=VALUE string
+		envVars = append(envVars, line)
 	}
-	return scanner.Err()
+
+	return envVars, scanner.Err()
 }
 
 // applyComposeLabels sets the required CustomLabels for compose to track containers
