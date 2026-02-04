@@ -273,18 +273,20 @@ func (s *Service) loadProject(ctx context.Context, composeFile, projectName stri
 	workingDir := filepath.Dir(composeFile)
 	envFile := filepath.Join(workingDir, ".env")
 
+	// Load .env file into process environment for ${VAR} substitution in compose
+	// This is needed because compose's WithDotEnv/WithEnvFiles only handle YAML interpolation,
+	// not environment variable substitution in the `environment:` section
+	if err := s.loadEnvFile(envFile); err != nil {
+		s.logWarn("Failed to load .env file", logrus.Fields{"error": err.Error(), "path": envFile})
+	}
+
 	// Build project options
 	opts := []cli.ProjectOptionsFn{
 		cli.WithWorkingDirectory(workingDir),
 		cli.WithName(projectName),
 		cli.WithProfiles(profiles),
-		cli.WithDotEnv, // Loads .env for YAML interpolation
-	}
-
-	// If .env file exists, also load it via WithEnvFiles for container env var substitution
-	// WithDotEnv handles YAML interpolation, WithEnvFiles handles ${VAR} in environment: sections
-	if _, err := os.Stat(envFile); err == nil {
-		opts = append(opts, cli.WithEnvFiles(envFile))
+		cli.WithOsEnv,  // Load OS environment (including vars we just set from .env)
+		cli.WithDotEnv, // Also load .env for YAML interpolation
 	}
 
 	projectOpts, err := cli.NewProjectOptions(
@@ -301,6 +303,42 @@ func (s *Service) loadProject(ctx context.Context, composeFile, projectName stri
 	}
 
 	return project, nil
+}
+
+// loadEnvFile reads a .env file and sets the variables in the process environment.
+func (s *Service) loadEnvFile(path string) error {
+	file, err := os.Open(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil // No .env file is fine
+		}
+		return err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		// Skip empty lines and comments
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		// Parse KEY=VALUE
+		parts := strings.SplitN(line, "=", 2)
+		if len(parts) != 2 {
+			continue
+		}
+		key := strings.TrimSpace(parts[0])
+		value := strings.TrimSpace(parts[1])
+		// Remove surrounding quotes if present
+		if len(value) >= 2 && ((value[0] == '"' && value[len(value)-1] == '"') || (value[0] == '\'' && value[len(value)-1] == '\'')) {
+			value = value[1 : len(value)-1]
+		}
+		if err := os.Setenv(key, value); err != nil {
+			s.logWarn("Failed to set env var", logrus.Fields{"key": key, "error": err.Error()})
+		}
+	}
+	return scanner.Err()
 }
 
 // applyComposeLabels sets the required CustomLabels for compose to track containers
