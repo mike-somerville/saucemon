@@ -367,7 +367,7 @@ class DockerMonitor:
 
             # Create Docker client
             if config.url.startswith("unix://"):
-                client = docker.DockerClient(base_url=config.url)
+                client = docker.DockerClient(base_url=config.url, version="auto")
             else:
                 # For TCP connections
                 tls_config = None
@@ -413,7 +413,8 @@ class DockerMonitor:
                 client = docker.DockerClient(
                     base_url=config.url,
                     tls=tls_config,
-                    timeout=self.settings.connection_timeout
+                    timeout=self.settings.connection_timeout,
+                    version="auto",
                 )
 
             # Test connection
@@ -1044,7 +1045,7 @@ class DockerMonitor:
 
             # Create new Docker client with updated config
             if config.url.startswith("unix://"):
-                client = docker.DockerClient(base_url=config.url)
+                client = docker.DockerClient(base_url=config.url, version="auto")
             else:
                 # For TCP connections
                 tls_config = None
@@ -1083,7 +1084,8 @@ class DockerMonitor:
                 client = docker.DockerClient(
                     base_url=config.url,
                     tls=tls_config,
-                    timeout=self.settings.connection_timeout
+                    timeout=self.settings.connection_timeout,
+                    version="auto",
                 )
 
             # Test connection
@@ -2023,7 +2025,7 @@ class DockerMonitor:
                         # Detect platform (Docker vs Podman) via API
                         temp_client = None
                         try:
-                            temp_client = docker.DockerClient(base_url=f"unix://{socket_path}")
+                            temp_client = docker.DockerClient(base_url=f"unix://{socket_path}", version="auto")
                             version_info = temp_client.version()
                             platform_name = version_info.get('Platform', {}).get('Name', '')
 
