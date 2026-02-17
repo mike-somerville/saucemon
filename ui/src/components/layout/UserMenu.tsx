@@ -9,7 +9,6 @@ import { useState, useRef, useEffect } from 'react'
 import { User, LogOut } from 'lucide-react'
 import { useAuth } from '@/features/auth/AuthContext'
 import { UserAccountModal } from '@/features/settings/UserAccountModal'
-import { useAppVersion } from '@/lib/contexts/AppVersionContext'
 import { cn } from '@/lib/utils'
 
 interface UserMenuProps {
@@ -17,8 +16,9 @@ interface UserMenuProps {
 }
 
 export function UserMenu({ isCollapsed }: UserMenuProps) {
-  const { version } = useAppVersion()
-  const githubReleasesUrl = `https://github.com/darthnorse/dockmon/releases/tag/v${version}`
+  // SAUCEMON_HOOK_START
+  const saucemonRepoUrl = 'https://github.com/mike-somerville/saucemon'
+  // SAUCEMON_HOOK_END
   const { user, logout } = useAuth()
   const [showMenu, setShowMenu] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
@@ -71,16 +71,18 @@ export function UserMenu({ isCollapsed }: UserMenuProps) {
               {user?.display_name && (
                 <p className="truncate text-xs text-muted-foreground">{user.display_name}</p>
               )}
+              {/* SAUCEMON_HOOK_START */}
               <a
-                href={githubReleasesUrl}
+                href={saucemonRepoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block mt-2 pt-2 border-t border-border/50 text-[10px] text-muted-foreground/70 hover:text-primary transition-colors"
-                title="View release notes on GitHub"
+                title="Saucemon on GitHub"
                 onClick={(e) => e.stopPropagation()}
               >
-                DockMon v{version}
+                SAUCEMON
               </a>
+              {/* SAUCEMON_HOOK_END */}
             </div>
           )}
         </button>
