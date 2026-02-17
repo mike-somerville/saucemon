@@ -1,0 +1,17 @@
+services:
+  saucemon:
+    image: mike-somerville/saucemon:latest # Your custom image
+    container_name: saucemon-customer-name # Change per customer
+    restart: unless-stopped
+    environment:
+      - VITE_SAUCEMON_MODE=true
+      - REVERSE_PROXY_MODE=true # Required since you use Nginx Proxy Manager
+      - DOCKMON_CORS_ORIGINS=https://customer.saucemon.io
+      - PYTHONPATH=/app/backend
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Use a unique path for every customer silo
+      - /mnt/efs/saucemon/data/customer_name:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - npm_network # Connects to your existing NPM container

@@ -7,16 +7,18 @@ services:
       # Example: For accessing DockMon at https://domain.com/dockmon/
       # args:
       #   - BASE_PATH=/dockmon/
-    container_name: dockmon
+    container_name: saucemon
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
     ports:
-      - "8001:443"   # HTTPS only - backend access through nginx proxy
+      - "8111:443"   # HTTPS only - backend access through nginx proxy
     environment:
       - TZ=America/New_York  # Change to your local timezone (e.g., Europe/London, Asia/Tokyo, etc.)
       - PYTHONPATH=/app/backend
       - PYTHONUNBUFFERED=1
+      - VITE_SAUCEMON_MODE=true  # SAUCEMON - to see your changes locally/FrontEnd 
+      - SAUCEMON_MODE=true      # SAUCEMON - For the Backend (Python)
 
       # Optional: Set BASE_PATH for runtime (must match build arg above)
       # - BASE_PATH=/dockmon/

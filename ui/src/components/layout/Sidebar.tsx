@@ -32,6 +32,10 @@ import {
   WifiOff,
   type LucideIcon,
 } from 'lucide-react'
+
+// SAUCEMON_HOOK_START
+import { SaucemonBillingNav } from './SaucemonBillingNav';
+// SAUCEMON_HOOK_END
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useWebSocketContext } from '@/lib/websocket/WebSocketProvider'
@@ -66,7 +70,9 @@ interface SidebarProps {
 export function Sidebar({ isMobileMenuOpen = false, onMobileClose }: SidebarProps) {
   const { status: wsStatus } = useWebSocketContext()
   const { isCollapsed, setCollapsed } = useSidebarCollapsed()
-
+  // SAUCEMON_HOOK_START
+  const isSaucemonSaaS = import.meta.env.VITE_SAUCEMON_MODE === 'true';
+  // SAUCEMON_HOOK_END
   // Notify AppLayout when collapsed state changes (for layout adjustments)
   useEffect(() => {
     window.dispatchEvent(new Event('sidebar-toggle'))
@@ -182,6 +188,9 @@ export function Sidebar({ isMobileMenuOpen = false, onMobileClose }: SidebarProp
             </NavLink>
           )
         })}
+        {/* SAUCEMON_HOOK_START */}
+        {isSaucemonSaaS && <SaucemonBillingNav isCollapsed={isCollapsed} onMobileClose={onMobileClose} />}
+        {/* SAUCEMON_HOOK_END */}
       </nav>
 
       {/* User Info + WebSocket Status (bottom) */}
