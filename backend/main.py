@@ -88,6 +88,9 @@ from agent.connection_manager import agent_connection_manager
 from packaging.version import parse as parse_version, InvalidVersion
 from deployment import routes as deployment_routes, DeploymentExecutor
 from deployment import stack_routes
+# SAUCEMON_HOOK_START
+from saucemon.admin_routes import router as saucemon_admin_router
+# SAUCEMON_HOOK_END
 
 # Configure logging
 setup_logging()
@@ -477,6 +480,10 @@ app.include_router(auth_v2_router)  # v2 cookie-based auth
 app.include_router(user_v2_router)  # v2 user preferences
 app.include_router(deployment_routes.router)  # v2.2.7+ deployment endpoints
 app.include_router(stack_routes.router)  # v2.2.7+ stacks endpoints
+# SAUCEMON_HOOK_START
+if AppConfig.SAUCEMON_MODE:
+    app.include_router(saucemon_admin_router)  # saucemon SaaS admin endpoints
+# SAUCEMON_HOOK_END
 # app.include_router(alerts_router)  # MOVED: Registered after v2 rules routes
 
 # API key routes (v2.1.8+)

@@ -4,16 +4,63 @@
   "hooks": [
     {
       "file": "ui/src/components/layout/Sidebar.tsx",
-      "hook": "SaucemonBillingNav",
-      "purpose": "Injects the Billing tab into the main sidebar when SaaS mode is active."
+      "hook": "SaucemonBillingNav import",
+      "line": 37,
+      "purpose": "Loads isolated saucemon sidebar extension component."
+    },
+    {
+      "file": "ui/src/components/layout/Sidebar.tsx",
+      "hook": "isSaucemonSaaS guard",
+      "line": 74,
+      "purpose": "Enables saucemon sidebar items only when VITE_SAUCEMON_MODE=true."
+    },
+    {
+      "file": "ui/src/components/layout/Sidebar.tsx",
+      "hook": "SaucemonBillingNav JSX injection",
+      "line": 192,
+      "purpose": "Injects isolated saucemon navigation links into the base sidebar."
+    },
+    {
+      "file": "ui/src/App.tsx",
+      "hook": "SaucemonAdminPage import",
+      "line": 30,
+      "purpose": "Loads isolated saucemon admin page module."
+    },
+    {
+      "file": "ui/src/App.tsx",
+      "hook": "isSaucemonSaaS route guard",
+      "line": 83,
+      "purpose": "Enables /admin route only when VITE_SAUCEMON_MODE=true."
+    },
+    {
+      "file": "ui/src/App.tsx",
+      "hook": "SaucemonAdminPage route injection",
+      "line": 136,
+      "purpose": "Registers /admin inside protected routes for saucemon SaaS mode."
     },
     {
       "file": "backend/config/settings.py",
       "hook": "SAUCEMON_MODE",
+      "line": 251,
       "purpose": "Adds global SaaS toggle to the Python AppConfig class."
+    },
+    {
+      "file": "backend/main.py",
+      "hook": "saucemon_admin_router import",
+      "line": 92,
+      "purpose": "Loads isolated saucemon admin backend router."
+    },
+    {
+      "file": "backend/main.py",
+      "hook": "saucemon_admin_router registration",
+      "line": 484,
+      "purpose": "Registers saucemon admin endpoints only when SAUCEMON_MODE=true."
     }
   ],
   "isolated_files": [
-    "ui/src/components/layout/SaucemonBillingNav.tsx"
+    "ui/src/components/layout/SaucemonBillingNav.tsx",
+    "ui/src/features/saucemon-admin/SaucemonAdminPage.tsx",
+    "backend/saucemon/__init__.py",
+    "backend/saucemon/admin_routes.py"
   ]
 }

@@ -26,6 +26,9 @@ import { AlertsPage } from '@/features/alerts/AlertsPage'
 import { AlertRulesPage } from '@/features/alerts/AlertRulesPage'
 import { ContainerLogsPage } from '@/features/logs/ContainerLogsPage'
 import { SettingsPage } from '@/features/settings/SettingsPage'
+// SAUCEMON_HOOK_START
+import { SaucemonAdminPage } from '@/features/saucemon-admin/SaucemonAdminPage'
+// SAUCEMON_HOOK_END
 import { ChangePasswordModal } from '@/features/auth/ChangePasswordModal'
 import { StacksPage } from '@/features/deployments/StacksPage'
 import { QuickActionPage } from '@/features/quick-action/QuickActionPage'
@@ -76,6 +79,9 @@ function LoginRoute() {
 function AppRoutes() {
   const { isFirstLogin } = useAuth()
   const [showPasswordDialog, setShowPasswordDialog] = useState(false)
+  // SAUCEMON_HOOK_START
+  const isSaucemonSaaS = import.meta.env.VITE_SAUCEMON_MODE === 'true'
+  // SAUCEMON_HOOK_END
 
   // Show password change dialog when first login is detected
   // This fires whenever isFirstLogin changes from false to true
@@ -126,6 +132,9 @@ function AppRoutes() {
         <Route path="/alerts" element={<AlertsPage />} />
         <Route path="/alerts/rules" element={<AlertRulesPage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        {/* SAUCEMON_HOOK_START */}
+        {isSaucemonSaaS && <Route path="/admin" element={<SaucemonAdminPage />} />}
+        {/* SAUCEMON_HOOK_END */}
       </Route>
 
       {/* Catch-all redirect */}
