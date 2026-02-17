@@ -1,0 +1,38 @@
+<svg width="240" height="64" viewBox="0 0 240 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon background -->
+  <rect x="4" y="8" width="48" height="48" rx="12" fill="#0E0E11"/>
+
+  <!-- S (upper-left) -->
+  <text x="12" y="24"
+        font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont"
+        font-size="14"
+        font-weight="700"
+        fill="#FFFFFF">
+    S
+  </text>
+
+  <!-- Diagonal pulse (lower-left → upper-right) -->
+  <path d="M10 46 L18 38 L22 44 L28 20 L32 26 L42 14"
+        stroke="#27FF00"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+  <!-- M (lower-right) -->
+  <text x="32" y="48"
+        font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont"
+        font-size="14"
+        font-weight="700"
+        fill="#27FF00">
+    M
+  </text>
+
+  <!-- Wordmark -->
+  <text x="64" y="42"
+        font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont"
+        font-size="28"
+        font-weight="600"
+        fill="#0E0E11">
+    Sauce<tspan fill="#27FF00">Mon</tspan>
+  </text>
+</svg>

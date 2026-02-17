@@ -7,7 +7,7 @@ interface SaucemonBillingLinkProps {
   onMobileClose?: (() => void) | undefined | null
 }
 
-const SAUCEMON_ADMIN_PORTAL_URL = 'https://admin.saucemon.com'
+const SAUCEMON_ADMIN_PORTAL_URL = 'https://localhost:8222'
 
 export const SaucemonBillingLink: React.FC<SaucemonBillingLinkProps> = ({ isCollapsed, onMobileClose }) => {
   const tenantId = (import.meta.env.VITE_SAUCEMON_TENANT_ID as string | undefined)?.trim() || 'local'

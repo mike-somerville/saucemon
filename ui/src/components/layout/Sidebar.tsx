@@ -111,7 +111,13 @@ export function Sidebar({ isMobileMenuOpen = false, onMobileClose }: SidebarProp
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
             <Container className="h-5 w-5 text-primary" />
           </div>
-          <span className="text-lg font-semibold">DockMon</span>
+          {/* SAUCEMON_HOOK_START */}
+          <img
+            src="/images/SauceMon-whiteBackground-WhiteSquare_300x81.png"
+            alt="SAUCEMON"
+            className="h-6 w-auto max-w-[150px] object-contain"
+          />
+          {/* SAUCEMON_HOOK_END */}
         </div>
 
         {/* Desktop logo (conditional on collapsed state) */}
@@ -120,7 +126,13 @@ export function Sidebar({ isMobileMenuOpen = false, onMobileClose }: SidebarProp
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
               <Container className="h-5 w-5 text-primary" />
             </div>
-            <span className="text-lg font-semibold">DockMon</span>
+            {/* SAUCEMON_HOOK_START */}
+            <img
+              src="/images/SauceMon-whiteBackground-WhiteSquare_300x81.png"
+              alt="SAUCEMON"
+              className="h-6 w-auto max-w-[150px] object-contain"
+            />
+            {/* SAUCEMON_HOOK_END */}
           </div>
         )}
         {isCollapsed && (

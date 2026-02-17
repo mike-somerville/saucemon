@@ -17,8 +17,14 @@
     {
       "file": "ui/src/components/layout/Sidebar.tsx",
       "hook": "isSaucemonSaaS && <SaucemonBillingNav",
-      "line": 192,
+      "line": 204,
       "purpose": "Injects isolated saucemon navigation links into the base sidebar."
+    },
+    {
+      "file": "ui/src/components/layout/Sidebar.tsx",
+      "hook": "SauceMon-whiteBackground-WhiteSquare_300x81.png",
+      "line": 116,
+      "purpose": "Replaces DockMon header text with saucemon logo image in sidebar."
     },
     {
       "file": "ui/src/App.tsx",
