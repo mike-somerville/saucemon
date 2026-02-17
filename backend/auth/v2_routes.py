@@ -10,6 +10,7 @@ SECURITY IMPROVEMENTS over v1:
 """
 
 import logging
+import json
 from fastapi import APIRouter, HTTPException, Response, Cookie, Request, Depends
 from pydantic import BaseModel
 import argon2
@@ -60,6 +61,10 @@ class UpdateProfileRequest(BaseModel):
     """Update profile request with validation"""
     display_name: str | None = None
     username: str | None = None
+    # SAUCEMON_HOOK_START
+    company_name: str | None = None
+    primary_contact: str | None = None
+    # SAUCEMON_HOOK_END
 
 
 @router.post("/login", response_model=LoginResponse)
@@ -291,12 +296,24 @@ async def get_current_user_v2(
 
     with db.get_session() as session:
         user = session.query(User).filter(User.id == current_user["user_id"]).first()
+        # SAUCEMON_HOOK_START
+        prefs_data = {}
+        if user and user.prefs:
+            try:
+                prefs_data = json.loads(user.prefs)
+            except json.JSONDecodeError:
+                prefs_data = {}
+        # SAUCEMON_HOOK_END
 
         return {
             "user": {
                 "id": current_user["user_id"],
                 "username": current_user["username"],
                 "display_name": user.display_name if user and hasattr(user, 'display_name') else None,
+                # SAUCEMON_HOOK_START
+                "company_name": prefs_data.get("company_name"),
+                "primary_contact": prefs_data.get("primary_contact"),
+                # SAUCEMON_HOOK_END
                 "is_first_login": user.is_first_login if user else False
             }
         }
@@ -359,7 +376,7 @@ async def update_profile_v2(
     current_user: dict = Depends(get_current_user_dependency)
 ):
     """
-    Update user profile (display name, username).
+    Update user profile (display name, username, saucemon profile fields).
 
     SECURITY:
     - Requires valid session cookie
@@ -370,11 +387,40 @@ async def update_profile_v2(
     # SECURITY FIX: Use validated Pydantic model fields instead of dict.get()
     new_display_name = profile_data.display_name
     new_username = profile_data.username
+    # SAUCEMON_HOOK_START
+    new_company_name = profile_data.company_name
+    new_primary_contact = profile_data.primary_contact
+    # SAUCEMON_HOOK_END
 
     try:
         # Update display name if provided
         if new_display_name is not None:
             db.update_display_name(username, new_display_name)
+
+        # SAUCEMON_HOOK_START
+        # Persist saucemon profile metadata in users.prefs JSON.
+        if new_company_name is not None or new_primary_contact is not None:
+            with db.get_session() as session:
+                user = session.query(User).filter(User.username == username).first()
+                if not user:
+                    raise HTTPException(status_code=404, detail="User not found")
+
+                existing_prefs = {}
+                if user.prefs:
+                    try:
+                        existing_prefs = json.loads(user.prefs)
+                    except json.JSONDecodeError:
+                        existing_prefs = {}
+
+                if new_company_name is not None:
+                    existing_prefs["company_name"] = new_company_name.strip() or None
+
+                if new_primary_contact is not None:
+                    existing_prefs["primary_contact"] = new_primary_contact.strip() or None
+
+                user.prefs = json.dumps(existing_prefs)
+                session.commit()
+        # SAUCEMON_HOOK_END
 
         # Update username if provided and different
         if new_username and new_username != username:

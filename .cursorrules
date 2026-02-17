@@ -19,6 +19,7 @@
 - **Frontend**: React Functional Components. Avoid "render" terminology; focus on the `return` JSX.
 - **Backend**: FastAPI/Python. Custom settings must live inside the `AppConfig` class in `backend/config/settings.py`.
 - **Testing**: Local dev runs on `https://localhost:8111`.
+- **Production**:  (not yet) will run at `https://<customer_ID>.saucemon.com`.
 
 ## Mandatory Manifest
 - Maintain a `saucemon-manifest.json` in the root. 
@@ -26,3 +27,15 @@
 
 ## Deployment Blueprint
 - All customer containers are deployed as individual stacks using the `saucemon-customer.yml` template.
+
+## Focus exclusively on the 'Customer Experience' within this repo.
+
+- Profile UI: Update UserAccountModal.tsx to include profile management (Name, Email, Timezone).
+
+- Cross-App Linking: Any 'Billing' or 'Support' buttons must be external links pointing to https://admin.saucemon.com via environment variables.
+
+- No Global Logic: Do not add code here that attempts to manage OTHER containers outside of this silo.
+
+## Deferred / Out of Scope
+- **Forgot Password Flow**: DO NOT implement or suggest logic for password resets. This is deferred until the global Auth0/OIDC integration is finalized in the `SauceAdmin` portal.
+- **Email Services**: No local SMTP or email-sending logic should be added to this container.

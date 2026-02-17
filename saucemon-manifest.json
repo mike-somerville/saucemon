@@ -2,20 +2,112 @@
   "project": "saucemon",
   "version": "1.0.0",
   "hooks": [
-    {"file": "ui/src/components/layout/Sidebar.tsx", "hook": "SaucemonBillingNav", "line": 37, "purpose": "Loads isolated saucemon sidebar extension component."},
-    {"file": "ui/src/components/layout/Sidebar.tsx", "hook": "isSaucemonSaaS", "line": 74, "purpose": "Enables saucemon sidebar items only when VITE_SAUCEMON_MODE=true."},
-    {"file": "ui/src/components/layout/Sidebar.tsx", "hook": "isSaucemonSaaS && <SaucemonBillingNav", "line": 192, "purpose": "Injects isolated saucemon navigation links into the base sidebar."},
-    {"file": "ui/src/App.tsx", "hook": "SaucemonAdminPage", "line": 30, "purpose": "Loads isolated saucemon admin page module."},
-    {"file": "ui/src/App.tsx", "hook": "isSaucemonSaaS", "line": 83, "purpose": "Enables /admin route only when VITE_SAUCEMON_MODE=true."},
-    {"file": "ui/src/App.tsx", "hook": "/admin", "line": 136, "purpose": "Registers /admin inside protected routes for saucemon SaaS mode."},
-    {"file": "backend/config/settings.py", "hook": "SAUCEMON_MODE", "line": 251, "purpose": "Adds global SaaS toggle to the Python AppConfig class."},
-    {"file": "backend/main.py", "hook": "saucemon_admin_router", "line": 92, "purpose": "Loads isolated saucemon admin backend router."},
-    {"file": "backend/main.py", "hook": "app.include_router(saucemon_admin_router)", "line": 485, "purpose": "Registers saucemon admin endpoints only when SAUCEMON_MODE=true."},
-    {"file": "ui/src/components/layout/UserMenu.tsx", "hook": "saucemonRepoUrl", "line": 20, "purpose": "Branding: Saucemon repo URL in lower sidebar."},
-    {"file": "ui/src/components/layout/UserMenu.tsx", "hook": "SAUCEMON", "line": 79, "purpose": "Branding: Display SAUCEMON label with link to GitHub."}
+    {
+      "file": "ui/src/components/layout/Sidebar.tsx",
+      "hook": "SaucemonBillingNav",
+      "line": 37,
+      "purpose": "Loads isolated saucemon sidebar extension component."
+    },
+    {
+      "file": "ui/src/components/layout/Sidebar.tsx",
+      "hook": "isSaucemonSaaS",
+      "line": 74,
+      "purpose": "Enables saucemon sidebar items only when VITE_SAUCEMON_MODE=true."
+    },
+    {
+      "file": "ui/src/components/layout/Sidebar.tsx",
+      "hook": "isSaucemonSaaS && <SaucemonBillingNav",
+      "line": 192,
+      "purpose": "Injects isolated saucemon navigation links into the base sidebar."
+    },
+    {
+      "file": "ui/src/App.tsx",
+      "hook": "SaucemonAdminPage",
+      "line": 30,
+      "purpose": "Loads isolated saucemon admin page module."
+    },
+    {
+      "file": "ui/src/App.tsx",
+      "hook": "isSaucemonSaaS",
+      "line": 83,
+      "purpose": "Enables /admin route only when VITE_SAUCEMON_MODE=true."
+    },
+    {
+      "file": "ui/src/App.tsx",
+      "hook": "/admin",
+      "line": 136,
+      "purpose": "Registers /admin inside protected routes for saucemon SaaS mode."
+    },
+    {
+      "file": "backend/config/settings.py",
+      "hook": "SAUCEMON_MODE",
+      "line": 251,
+      "purpose": "Adds global SaaS toggle to the Python AppConfig class."
+    },
+    {
+      "file": "backend/main.py",
+      "hook": "saucemon_admin_router",
+      "line": 92,
+      "purpose": "Loads isolated saucemon admin backend router."
+    },
+    {
+      "file": "backend/main.py",
+      "hook": "app.include_router(saucemon_admin_router)",
+      "line": 485,
+      "purpose": "Registers saucemon admin endpoints only when SAUCEMON_MODE=true."
+    },
+    {
+      "file": "ui/src/components/layout/UserMenu.tsx",
+      "hook": "saucemonRepoUrl",
+      "line": 20,
+      "purpose": "Branding: Saucemon repo URL in lower sidebar."
+    },
+    {
+      "file": "ui/src/components/layout/UserMenu.tsx",
+      "hook": "SAUCEMON",
+      "line": 79,
+      "purpose": "Branding: Display SAUCEMON label with link to GitHub."
+    },
+    {
+      "file": "ui/src/features/settings/UserAccountModal.tsx",
+      "hook": "company_name",
+      "line": 65,
+      "purpose": "Stores and submits saucemon company profile field from account settings."
+    },
+    {
+      "file": "ui/src/features/settings/UserAccountModal.tsx",
+      "hook": "primary_contact",
+      "line": 66,
+      "purpose": "Stores and submits saucemon primary contact profile field from account settings."
+    },
+    {
+      "file": "ui/src/types/api.ts",
+      "hook": "company_name?: string | null",
+      "line": 30,
+      "purpose": "Extends current-user API typings with saucemon profile metadata."
+    },
+    {
+      "file": "ui/src/features/auth/AuthContext.tsx",
+      "hook": "primary_contact?: string | null",
+      "line": 27,
+      "purpose": "Extends auth context user typing for saucemon profile metadata."
+    },
+    {
+      "file": "backend/auth/v2_routes.py",
+      "hook": "company_name",
+      "line": 65,
+      "purpose": "Adds company_name persistence and response mapping in auth profile endpoints."
+    },
+    {
+      "file": "backend/auth/v2_routes.py",
+      "hook": "primary_contact",
+      "line": 66,
+      "purpose": "Adds primary_contact persistence and response mapping in auth profile endpoints."
+    }
   ],
   "isolated_files": [
     "ui/src/components/layout/SaucemonBillingNav.tsx",
+    "ui/src/components/layout/SaucemonBillingLink.tsx",
     "ui/src/features/saucemon-admin/SaucemonAdminPage.tsx",
     "backend/saucemon/__init__.py",
     "backend/saucemon/admin_routes.py"

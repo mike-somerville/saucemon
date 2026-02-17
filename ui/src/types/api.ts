@@ -26,6 +26,10 @@ export interface CurrentUserResponse {
     id: number
     username: string
     display_name?: string | null
+    // SAUCEMON_HOOK_START
+    company_name?: string | null
+    primary_contact?: string | null
+    // SAUCEMON_HOOK_END
     is_first_login?: boolean
   }
 }

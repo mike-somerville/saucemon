@@ -7,7 +7,7 @@
  * - Change their password
  */
 
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -27,9 +27,22 @@ export function UserAccountModal({ isOpen, onClose }: UserAccountModalProps) {
   const [showPasswordModal, setShowPasswordModal] = useState(false)
   const [username, setUsername] = useState(user?.username || '')
   const [displayName, setDisplayName] = useState(user?.display_name || '')
+  // SAUCEMON_HOOK_START
+  const [companyName, setCompanyName] = useState(user?.company_name || '')
+  const [primaryContact, setPrimaryContact] = useState(user?.primary_contact || '')
+  // SAUCEMON_HOOK_END
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // SAUCEMON_HOOK_START
+  useEffect(() => {
+    setUsername(user?.username || '')
+    setDisplayName(user?.display_name || '')
+    setCompanyName(user?.company_name || '')
+    setPrimaryContact(user?.primary_contact || '')
+  }, [user])
+  // SAUCEMON_HOOK_END
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -48,6 +61,10 @@ export function UserAccountModal({ isOpen, onClose }: UserAccountModalProps) {
       await apiClient.post('/v2/auth/update-profile', {
         username: username.trim(),
         display_name: displayName.trim() || null,
+        // SAUCEMON_HOOK_START
+        company_name: companyName.trim() || null,
+        primary_contact: primaryContact.trim() || null,
+        // SAUCEMON_HOOK_END
       })
 
       // Refetch user data
@@ -135,6 +152,50 @@ export function UserAccountModal({ isOpen, onClose }: UserAccountModalProps) {
                 This is how your name will be displayed
               </p>
             </div>
+
+            {/* SAUCEMON_HOOK_START */}
+            {/* Company Name */}
+            <div>
+              <label htmlFor="companyName" className="block text-sm font-medium mb-1">
+                Company Name
+              </label>
+              <Input
+                id="companyName"
+                type="text"
+                value={companyName}
+                onChange={(e) => {
+                  setCompanyName(e.target.value)
+                  if (error || success) {
+                    setError(null)
+                    setSuccess(null)
+                  }
+                }}
+                disabled={isSubmitting}
+                placeholder="Optional company or organization"
+              />
+            </div>
+
+            {/* Primary Contact */}
+            <div>
+              <label htmlFor="primaryContact" className="block text-sm font-medium mb-1">
+                Primary Contact
+              </label>
+              <Input
+                id="primaryContact"
+                type="text"
+                value={primaryContact}
+                onChange={(e) => {
+                  setPrimaryContact(e.target.value)
+                  if (error || success) {
+                    setError(null)
+                    setSuccess(null)
+                  }
+                }}
+                disabled={isSubmitting}
+                placeholder="Optional contact name or email"
+              />
+            </div>
+            {/* SAUCEMON_HOOK_END */}
 
             {/* Username */}
             <div>

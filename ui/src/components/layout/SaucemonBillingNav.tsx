@@ -1,7 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { CreditCard, Shield } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { SaucemonBillingLink } from './SaucemonBillingLink';
 
 interface SaucemonBillingNavProps {
   isCollapsed: boolean;
@@ -30,24 +31,7 @@ export const SaucemonBillingNav: React.FC<SaucemonBillingNavProps> = ({ isCollap
         {!isCollapsed && <span className="hidden md:inline">Admin</span>}
       </NavLink>
 
-      <NavLink
-        to="/billing"
-        onClick={() => onMobileClose?.()}
-        className={({ isActive }) =>
-          cn(
-            'group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
-            'hover:bg-surface-2 hover:text-foreground',
-            isActive
-              ? 'bg-surface-2 text-foreground before:absolute before:left-0 before:top-0 before:h-full before:w-0.5 before:rounded-r before:bg-primary'
-              : 'text-muted-foreground'
-          )
-        }
-        title={isCollapsed ? 'Billing' : undefined}
-      >
-        <CreditCard className="h-5 w-5 flex-shrink-0" />
-        <span className="md:hidden">Billing</span>
-        {!isCollapsed && <span className="hidden md:inline">Billing</span>}
-      </NavLink>
+      <SaucemonBillingLink isCollapsed={isCollapsed} onMobileClose={onMobileClose} />
     </>
   );
 };
