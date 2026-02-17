@@ -4,37 +4,37 @@
   "hooks": [
     {
       "file": "ui/src/components/layout/Sidebar.tsx",
-      "hook": "SaucemonBillingNav import",
+      "hook": "SaucemonBillingNav",
       "line": 37,
       "purpose": "Loads isolated saucemon sidebar extension component."
     },
     {
       "file": "ui/src/components/layout/Sidebar.tsx",
-      "hook": "isSaucemonSaaS guard",
+      "hook": "isSaucemonSaaS",
       "line": 74,
       "purpose": "Enables saucemon sidebar items only when VITE_SAUCEMON_MODE=true."
     },
     {
       "file": "ui/src/components/layout/Sidebar.tsx",
-      "hook": "SaucemonBillingNav JSX injection",
+      "hook": "isSaucemonSaaS && <SaucemonBillingNav",
       "line": 192,
       "purpose": "Injects isolated saucemon navigation links into the base sidebar."
     },
     {
       "file": "ui/src/App.tsx",
-      "hook": "SaucemonAdminPage import",
+      "hook": "SaucemonAdminPage",
       "line": 30,
       "purpose": "Loads isolated saucemon admin page module."
     },
     {
       "file": "ui/src/App.tsx",
-      "hook": "isSaucemonSaaS route guard",
+      "hook": "isSaucemonSaaS",
       "line": 83,
       "purpose": "Enables /admin route only when VITE_SAUCEMON_MODE=true."
     },
     {
       "file": "ui/src/App.tsx",
-      "hook": "SaucemonAdminPage route injection",
+      "hook": "/admin",
       "line": 136,
       "purpose": "Registers /admin inside protected routes for saucemon SaaS mode."
     },
@@ -46,14 +46,14 @@
     },
     {
       "file": "backend/main.py",
-      "hook": "saucemon_admin_router import",
+      "hook": "saucemon_admin_router",
       "line": 92,
       "purpose": "Loads isolated saucemon admin backend router."
     },
     {
       "file": "backend/main.py",
-      "hook": "saucemon_admin_router registration",
-      "line": 484,
+      "hook": "app.include_router(saucemon_admin_router)",
+      "line": 485,
       "purpose": "Registers saucemon admin endpoints only when SAUCEMON_MODE=true."
     }
   ],
