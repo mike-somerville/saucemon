@@ -1,0 +1,19 @@
+{
+  "project": "saucemon",
+  "version": "1.0.0",
+  "hooks": [
+    {
+      "file": "ui/src/components/layout/Sidebar.tsx",
+      "hook": "SaucemonBillingNav",
+      "purpose": "Injects the Billing tab into the main sidebar when SaaS mode is active."
+    },
+    {
+      "file": "backend/config/settings.py",
+      "hook": "SAUCEMON_MODE",
+      "purpose": "Adds global SaaS toggle to the Python AppConfig class."
+    }
+  ],
+  "isolated_files": [
+    "ui/src/components/layout/SaucemonBillingNav.tsx"
+  ]
+}

@@ -1,0 +1,28 @@
+# Project Saucemon: SaaS Transformation Rules
+
+## Core Architecture
+- **Identity**: This is Project Saucemon, a multi-tenant SaaS fork of darthnorse/dockmon.
+- **Tenancy Model**: Physical Silo. 1 Customer = 1 Container = 1 SQLite DB.
+- **DB Path**: Exactly `/app/data/dockmon.db`.
+- **Branding**: Every custom addition MUST be labeled or searchable via the string 'saucemon'.
+
+## Code Preservation Policy (The Hook Pattern)
+- **Rule**: NEVER rewrite large sections of base code. 
+- **Pattern**: Insert a single-line "entry point" into base files that calls an isolated Saucemon file.
+- **Markers**: Always wrap these entry points with:
+  // SAUCEMON_HOOK_START
+  [Your Hook]
+  // SAUCEMON_HOOK_END
+
+## Technical Constraints
+- **Environments**: Toggle SaaS logic via `VITE_SAUCEMON_MODE` (frontend) and `SAUCEMON_MODE` (backend).
+- **Frontend**: React Functional Components. Avoid "render" terminology; focus on the `return` JSX.
+- **Backend**: FastAPI/Python. Custom settings must live inside the `AppConfig` class in `backend/config/settings.py`.
+- **Testing**: Local dev runs on `https://localhost:8111`.
+
+## Mandatory Manifest
+- Maintain a `saucemon-manifest.json` in the root. 
+- Every time a base file is "hooked," update the manifest with the file path and the purpose of the hook.
+
+## Deployment Blueprint
+- All customer containers are deployed as individual stacks using the `saucemon-customer.yml` template.
