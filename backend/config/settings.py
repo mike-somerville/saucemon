@@ -236,10 +236,6 @@ def get_external_url() -> Optional[str]:
 class AppConfig:
     """Main application configuration"""
     
-    # SAUCEMON_HOOK_START
-    SAUCEMON_MODE: bool = os.getenv("SAUCEMON_MODE", "false").lower() == "true"
-    # SAUCEMON_HOOK_END
-    
     # Server settings
     HOST = os.getenv('DOCKMON_HOST', '0.0.0.0')
     PORT = _safe_int('DOCKMON_PORT', 8080, min_val=1, max_val=65535)
@@ -250,6 +246,10 @@ class AppConfig:
     # Security settings
     CORS_ORIGINS = get_cors_origins()
     REVERSE_PROXY_MODE = os.getenv('REVERSE_PROXY_MODE', 'false').lower() == 'true'
+    
+    # SAUCEMON_HOOK_START
+    SAUCEMON_MODE: bool = os.getenv("SAUCEMON_MODE", "false").lower() == "true"
+    # SAUCEMON_HOOK_END
 
     # Import centralized paths
     from .paths import DATABASE_URL as DEFAULT_DATABASE_URL, CREDENTIALS_FILE as DEFAULT_CREDENTIALS_FILE
