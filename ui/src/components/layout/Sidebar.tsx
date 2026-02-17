@@ -108,36 +108,33 @@ export function Sidebar({ isMobileMenuOpen = false, onMobileClose }: SidebarProp
       <div className="flex h-16 items-center justify-between border-b border-border px-4">
         {/* Mobile: always show full logo, Desktop: conditional */}
         <div className="flex items-center gap-2 md:hidden">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-            <Container className="h-5 w-5 text-primary" />
-          </div>
           {/* SAUCEMON_HOOK_START */}
-          <img
-            src="/images/SauceMon-whiteBackground-WhiteSquare_300x81.png"
-            alt="SAUCEMON"
-            className="h-6 w-auto max-w-[150px] object-contain"
-          />
+          <span className="text-lg font-semibold">
+            <span className="text-white">Sauce</span>
+            <span className="text-success">Mon</span>
+          </span>
           {/* SAUCEMON_HOOK_END */}
         </div>
 
         {/* Desktop logo (conditional on collapsed state) */}
         {!isCollapsed && (
           <div className="hidden md:flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-              <Container className="h-5 w-5 text-primary" />
-            </div>
             {/* SAUCEMON_HOOK_START */}
-            <img
-              src="/images/SauceMon-whiteBackground-WhiteSquare_300x81.png"
-              alt="SAUCEMON"
-              className="h-6 w-auto max-w-[150px] object-contain"
-            />
+            <span className="text-lg font-semibold">
+              <span className="text-white">Sauce</span>
+              <span className="text-success">Mon</span>
+            </span>
             {/* SAUCEMON_HOOK_END */}
           </div>
         )}
         {isCollapsed && (
-          <div className="hidden md:flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-            <Container className="h-5 w-5 text-primary" />
+          <div className="hidden md:flex items-center justify-center">
+            {/* SAUCEMON_HOOK_START */}
+            <span className="text-sm font-semibold">
+              <span className="text-white">S</span>
+              <span className="text-success">M</span>
+            </span>
+            {/* SAUCEMON_HOOK_END */}
           </div>
         )}
 

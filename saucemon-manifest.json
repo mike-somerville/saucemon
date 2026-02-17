@@ -22,9 +22,9 @@
     },
     {
       "file": "ui/src/components/layout/Sidebar.tsx",
-      "hook": "SauceMon-whiteBackground-WhiteSquare_300x81.png",
+      "hook": "Sauce",
       "line": 116,
-      "purpose": "Replaces DockMon header text with saucemon logo image in sidebar."
+      "purpose": "Sidebar branding: SauceMon text (Sauce white, Mon success green)."
     },
     {
       "file": "ui/src/App.tsx",
